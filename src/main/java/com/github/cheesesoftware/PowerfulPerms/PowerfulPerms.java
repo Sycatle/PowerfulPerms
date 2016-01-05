@@ -32,6 +32,7 @@ public class PowerfulPerms extends JavaPlugin implements Listener, IPlugin {
 
     private SQL sql;
     private PermissionManager permissionManager;
+
     public static String pluginPrefix = ChatColor.WHITE + "[" + ChatColor.BLUE + "PowerfulPerms" + ChatColor.WHITE + "] ";
     public static String consolePrefix = "[PowerfulPerms] ";
     public static boolean debug = false;
@@ -96,9 +97,12 @@ public class PowerfulPerms extends JavaPlugin implements Listener, IPlugin {
 
         getServer().getPluginManager().registerEvents(this, this);
         this.sql = new SQL(getConfig().getString("host"), getConfig().getString("database"), getConfig().getInt("port"), getConfig().getString("username"), getConfig().getString("password"));
+
+        PermissionManagerBase.redis = getConfig().getBoolean("redis", true);
         PermissionManagerBase.redis_ip = getConfig().getString("redis_ip");
         PermissionManagerBase.redis_port = getConfig().getInt("redis_port");
         PermissionManagerBase.redis_password = getConfig().getString("redis_password");
+
         debug = getConfig().getBoolean("debug");
 
         try {

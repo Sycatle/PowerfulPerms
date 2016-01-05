@@ -69,10 +69,14 @@ public class MySQLDatabase extends Database {
                         + tblGroups
                         + "` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`name` varchar(255) NOT NULL,`parents` longtext NOT NULL,`prefix` text NOT NULL,`suffix` text NOT NULL,PRIMARY KEY (`id`),UNIQUE KEY `id_UNIQUE` (`id`),UNIQUE KEY `name_UNIQUE` (`name`)) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8";
                 try {
-                    sql.getConnection().prepareStatement(groupsTable).execute();
+                    PreparedStatement s = sql.getConnection().prepareStatement(groupsTable);
+                    s.execute();
+                    s.close();
 
                     // Insert one group "Guest"
-                    sql.getConnection().prepareStatement("INSERT INTO `" + tblGroups + "` (`id`, `name`, `parents`, `prefix`, `suffix`) VALUES ('1', 'Guest', '', '[Guest]', ': ');").execute();
+                    s = sql.getConnection().prepareStatement("INSERT INTO `" + tblGroups + "` (`id`, `name`, `parents`, `prefix`, `suffix`) VALUES ('1', 'Guest', '', '[Guest]', ': ');");
+                    s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -96,24 +100,16 @@ public class MySQLDatabase extends Database {
                         + tblPlayers
                         + "` (`uuid` varchar(36) NOT NULL DEFAULT '',`name` varchar(32) NOT NULL,`groups` longtext NOT NULL,`prefix` text NOT NULL,`suffix` text NOT NULL,PRIMARY KEY (`name`,`uuid`),UNIQUE KEY `uuid_UNIQUE` (`uuid`)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
                 try {
-                    sql.getConnection().prepareStatement(playersTable).execute();
+                    PreparedStatement s = sql.getConnection().prepareStatement(playersTable);
+                    s.execute();
+                    s.close();
+
+                    // Insert player [default]
+                    s = sql.getConnection().prepareStatement("INSERT INTO `" + tblPlayers + "` (`name`, `groups`, `prefix`, `suffix`) VALUES ('[default]', ':1:p;', '', '');");
+                    s.execute();
+                    s.close();
                 } catch (SQLException e1) {
                     e1.printStackTrace();
-                    success = false;
-                }
-
-                // Insert [default] if not exists
-                try {
-                    PreparedStatement s = sql.getConnection().prepareStatement("SELECT * FROM players WHERE `name`=?");
-                    s.setString(1, "[default]");
-                    s.execute();
-                    ResultSet result = s.getResultSet();
-                    if (!result.next()) {
-                        // Default player doesn't exist. Create it.
-                        sql.getConnection().prepareStatement("INSERT INTO `" + tblPlayers + "` (`name`, `groups`, `prefix`, `suffix`) VALUES ('[default]', '1', '', '');").execute();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
                     success = false;
                 }
 
@@ -135,7 +131,9 @@ public class MySQLDatabase extends Database {
                         + tblPermissions
                         + "` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`playeruuid` varchar(36) NOT NULL,`playername` varchar(45) NOT NULL,`groupname` varchar(255) NOT NULL,`permission` varchar(128) NOT NULL,`world` varchar(128) NOT NULL,`server` varchar(128) NOT NULL,PRIMARY KEY (`id`,`playeruuid`,`playername`,`groupname`),UNIQUE KEY `id_UNIQUE` (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
                 try {
-                    sql.getConnection().prepareStatement(permissionsTable).execute();
+                    PreparedStatement s = sql.getConnection().prepareStatement(permissionsTable);
+                    s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -162,6 +160,7 @@ public class MySQLDatabase extends Database {
                     s.setString(3, prefix);
                     s.setString(4, suffix);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -215,7 +214,7 @@ public class MySQLDatabase extends Database {
                     s.execute();
                     ResultSet r = s.getResultSet();
                     result = fromResultSet(r);
-
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     result = new DBResult(false);
@@ -241,7 +240,7 @@ public class MySQLDatabase extends Database {
                     s.execute();
                     ResultSet r = s.getResultSet();
                     result = fromResultSet(r);
-
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     result = new DBResult(false);
@@ -266,6 +265,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, name);
                     s.setString(2, uuid.toString());
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -290,6 +290,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, uuid.toString());
                     s.setString(2, name);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -314,7 +315,7 @@ public class MySQLDatabase extends Database {
                     s.execute();
                     ResultSet r = s.getResultSet();
                     result = fromResultSet(r);
-
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     result = new DBResult(false);
@@ -340,7 +341,7 @@ public class MySQLDatabase extends Database {
                     s.execute();
                     ResultSet r = s.getResultSet();
                     result = fromResultSet(r);
-
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     result = new DBResult(false);
@@ -366,7 +367,7 @@ public class MySQLDatabase extends Database {
                     s.execute();
                     ResultSet r = s.getResultSet();
                     result = fromResultSet(r);
-
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     result = new DBResult(false);
@@ -392,7 +393,7 @@ public class MySQLDatabase extends Database {
                     s.execute();
                     ResultSet r = s.getResultSet();
                     result = fromResultSet(r);
-
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     result = new DBResult(false);
@@ -423,6 +424,7 @@ public class MySQLDatabase extends Database {
                     if (result.next()) {
                         success = true;
                     }
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -454,6 +456,7 @@ public class MySQLDatabase extends Database {
                     s.setString(5, world);
                     s.setString(6, server);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -522,6 +525,7 @@ public class MySQLDatabase extends Database {
                     amount = s.executeUpdate();
                     if (amount <= 0)
                         success = false;
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -549,10 +553,11 @@ public class MySQLDatabase extends Database {
                     s.setString(2, permission);
                     s.setString(3, server);
                     s.setString(4, world);
-                    
+
                     amount = s.executeUpdate();
                     if (amount <= 0)
                         success = false;
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -581,6 +586,7 @@ public class MySQLDatabase extends Database {
                     amount = s.executeUpdate();
                     if (amount <= 0)
                         success = false;
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -610,6 +616,7 @@ public class MySQLDatabase extends Database {
                     amount = s.executeUpdate();
                     if (amount <= 0)
                         success = false;
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -636,6 +643,7 @@ public class MySQLDatabase extends Database {
                     amount = s.executeUpdate();
                     if (amount <= 0)
                         success = false;
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -660,6 +668,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, prefix);
                     s.setString(2, name);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -684,6 +693,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, suffix);
                     s.setString(2, name);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -708,6 +718,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, groups);
                     s.setString(2, name);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -734,6 +745,7 @@ public class MySQLDatabase extends Database {
                     amount = s.executeUpdate();
                     if (amount <= 0)
                         success = false;
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -758,6 +770,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, parents);
                     s.setString(2, group);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -782,6 +795,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, prefix);
                     s.setString(2, group);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
@@ -806,6 +820,7 @@ public class MySQLDatabase extends Database {
                     s.setString(1, suffix);
                     s.setString(2, group);
                     s.execute();
+                    s.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     success = false;
