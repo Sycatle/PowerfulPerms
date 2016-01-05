@@ -1,8 +1,6 @@
 package com.github.cheesesoftware.PowerfulPerms;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
@@ -10,16 +8,9 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import be.maximvdw.mvdwupdater.MVdWUpdater;
-import be.maximvdw.mvdwupdater.Version;
-import be.maximvdw.mvdwupdater.spigotsite.api.resource.Resource;
-import be.maximvdw.mvdwupdater.ui.SendConsole;
 
 import com.github.cheesesoftware.PowerfulPerms.common.IPlugin;
 import com.github.cheesesoftware.PowerfulPerms.common.IScheduler;
@@ -40,59 +31,11 @@ public class PowerfulPerms extends JavaPlugin implements Listener, IPlugin {
     public void onEnable() {
         this.saveDefaultConfig();
 
+        // Auto updater
         if (getServer().getPluginManager().isPluginEnabled("MVdWUpdater")) {
-            try {
-                int resourceId = 8143;
-                MVdWUpdater updater = (MVdWUpdater) Bukkit.getPluginManager().getPlugin("MVdWUpdater");
-                if (updater.hasBought(updater.getSpigotUser(), resourceId)) {
-                    SendConsole.info("Hooked into MVdWUpdater!");
-
-                    List<Resource> premiums = updater.getPurchasedResources(updater.getSpigotUser());
-                    for (Resource premium : premiums) {
-                        if (premium.getResourceId() == resourceId) {
-                            // Resource id found
-                            SendConsole.info("Checking for new updates for: " + this.getName() + " ...");
-
-                            // Compare versions
-                            Version currentPluginVersion = new Version(getDescription().getVersion());
-                            Version newPluginVersion = new Version(updater.getResourceVersionString(resourceId));
-
-                            if (currentPluginVersion.compare(newPluginVersion) == 1) {
-                                SendConsole.info("An update for '" + getName() + "' is available");
-
-                                SendConsole.info("Getting download link ...");
-                                Resource premiumResource = updater.getSpigotSiteAPI().getResourceManager().getResourceById(premium.getResourceId(), updater.getSpigotUser());
-
-                                // Download the plugin to the update folder
-                                File pluginFile = null;
-                                try {
-                                    pluginFile = new File(URLDecoder.decode(getClass().getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8"));
-                                } catch (UnsupportedEncodingException e) {
-
-                                }
-
-                                File outputFile = null;
-                                try {
-                                    outputFile = new File(Bukkit.getUpdateFolderFile(), pluginFile.getName());
-                                } catch (Exception ex) {
-
-                                }
-
-                                if (pluginFile != null && outputFile != null) {
-                                    SendConsole.info("Downloading '" + this.getName() + "' ...");
-                                    premiumResource.downloadResource(updater.getSpigotUser(), outputFile);
-
-                                    SendConsole.info("An new update for " + this.getName() + " is ready to be installed on next restart!");
-                                }
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Bukkit.getLogger().info(consolePrefix + "Found MVdWUpdater. Enabling auto updater.");
+            Updater updater = new Updater();
+            updater.update(this);
         }
 
         getServer().getPluginManager().registerEvents(this, this);
