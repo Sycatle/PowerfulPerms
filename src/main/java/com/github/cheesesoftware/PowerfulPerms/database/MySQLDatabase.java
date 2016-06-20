@@ -345,6 +345,12 @@ public class MySQLDatabase extends Database {
             }
         }, done.sameThread());
     }
+    
+    @Override
+    public void getGroupPlayers(String group, UUID uuid, DBRunnable done) {
+        // TODO Auto-generated method stub
+        
+    }
 
     @Override
     public void getGroups(final DBRunnable done) {

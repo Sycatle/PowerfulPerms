@@ -31,6 +31,8 @@ public interface IDatabase {
     public void setPlayerName(UUID uuid, String name, DBRunnable done);
 
     public void setPlayerUUID(String name, UUID uuid, DBRunnable done);
+        
+    public void getGroupPlayers(String group, UUID uuid, DBRunnable done);
 
     public void getGroups(DBRunnable done);
 
