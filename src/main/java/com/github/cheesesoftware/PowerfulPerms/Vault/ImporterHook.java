@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.github.cheesesoftware.PowerfulPerms.PowerfulPermissionManager;
 import com.github.cheesesoftware.PowerfulPerms.common.PermissionManagerBase;
 import com.github.cheesesoftware.PowerfulPerms.common.PermissionPlayerBase;
 import com.github.cheesesoftware.PowerfulPermsAPI.CachedGroup;
@@ -130,16 +132,21 @@ public class ImporterHook implements eu.taigacraft.importer.permissions.Permissi
 
     @Override
     public void load(OfflinePlayer player) {
-
+        PowerfulPermissionManager base = (PowerfulPermissionManager) permissionManager;
+        base.loadPlayer(player.getUniqueId(), player.getName(), true, true);
+        base.loadCachedPlayer(player);
     }
 
     @Override
     public void unload(OfflinePlayer player) {
-
+        PowerfulPermissionManager base = (PowerfulPermissionManager) permissionManager;
+        if (!player.isOnline())
+            base.onPlayerQuit(new PlayerQuitEvent(null, null));
     }
 
     @Override
     public boolean isLoaded(OfflinePlayer arg0) {
+        base.
         return true;
     }
 }

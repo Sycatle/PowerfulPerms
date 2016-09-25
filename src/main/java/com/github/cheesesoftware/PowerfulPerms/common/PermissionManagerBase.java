@@ -725,7 +725,7 @@ public abstract class PermissionManagerBase implements PermissionManager {
         }, sameThread);
     }
 
-    protected PermissionPlayerBase loadCachedPlayer(UUID uuid) {
+    public PermissionPlayerBase loadCachedPlayer(UUID uuid) {
         debug("continueLoadPlayer " + uuid);
         CachedPlayer cachedPlayer = cachedPlayers.get(uuid);
         if (cachedPlayer == null) {

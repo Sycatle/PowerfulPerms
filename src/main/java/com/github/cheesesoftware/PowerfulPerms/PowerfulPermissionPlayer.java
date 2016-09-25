@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 import com.github.cheesesoftware.PowerfulPerms.common.PermissionManagerBase;
 import com.github.cheesesoftware.PowerfulPerms.common.PermissionPlayerBase;
@@ -16,16 +16,16 @@ import com.github.cheesesoftware.PowerfulPermsAPI.Permission;
 import com.github.cheesesoftware.PowerfulPermsAPI.PowerfulPermsPlugin;
 
 public class PowerfulPermissionPlayer extends PermissionPlayerBase {
-    private Player player;
+    private OfflinePlayer player;
 
-    public PowerfulPermissionPlayer(Player p, LinkedHashMap<String, List<CachedGroup>> serverGroups, List<Permission> permissions, String prefix, String suffix, PowerfulPermsPlugin plugin,
+    public PowerfulPermissionPlayer(OfflinePlayer p, LinkedHashMap<String, List<CachedGroup>> serverGroups, List<Permission> permissions, String prefix, String suffix, PowerfulPermsPlugin plugin,
             boolean isDefault) {
         super(serverGroups, permissions, prefix, suffix, plugin, isDefault);
         this.player = p;
         this.updatePermissions();
     }
 
-    public PowerfulPermissionPlayer(Player p, PermissionPlayerBase base, PowerfulPermsPlugin plugin) {
+    public PowerfulPermissionPlayer(OfflinePlayer p, PermissionPlayerBase base, PowerfulPermsPlugin plugin) {
         super(base.getCachedGroups(), base.getPermissions(), base.getOwnPrefix(), base.getOwnSuffix(), plugin, base.isDefault());
         this.player = p;
         this.updatePermissions();
@@ -43,7 +43,7 @@ public class PowerfulPermissionPlayer extends PermissionPlayerBase {
     /**
      * Returns the player attached to this PermissionPlayer.
      */
-    public Player getPlayer() {
+    public OfflinePlayer getPlayer() {
         return this.player;
     }
 
@@ -62,7 +62,8 @@ public class PowerfulPermissionPlayer extends PermissionPlayerBase {
     public void updatePermissions() {
         this.updateGroups(PermissionManagerBase.serverName);
 
-        List<String> perms = PermissionPlayerBase.calculatePermissions(PermissionManagerBase.serverName, player.getWorld().getName(), super.getGroups(), this);
+        List<String> perms = PermissionPlayerBase.calculatePermissions(PermissionManagerBase.serverName, (player.isOnline() ? player.getPlayer().getWorld().getName() : "no_world"), super.getGroups(),
+                this);
         List<String> realPerms = calculateRealPermissions(perms);
         super.setRealPermissions(realPerms);
     }

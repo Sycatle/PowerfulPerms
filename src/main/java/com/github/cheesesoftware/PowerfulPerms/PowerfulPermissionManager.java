@@ -167,7 +167,7 @@ public class PowerfulPermissionManager extends PermissionManagerBase implements 
         }
     }
 
-    private void loadCachedPlayer(Player p) {
+    public void loadCachedPlayer(OfflinePlayer p) {
         debug("loadCachedPlayer begin");
 
         playersLock.lock();
@@ -184,14 +184,16 @@ public class PowerfulPermissionManager extends PermissionManagerBase implements 
             removePermissionPlayer(p.getUniqueId());
 
             PowerfulPermissionPlayer permissionsPlayer = new PowerfulPermissionPlayer(p, base, plugin);
-            try {
-                injector.inject(p, new CustomPermissibleBase(permissionsPlayer));
-            } catch (NoSuchFieldException e) {
-                Bukkit.getLogger().severe(PowerfulPerms.consolePrefix + "You're not using Spigot. Spigot must be used for permissions to work properly.");
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                Bukkit.getLogger().severe(PowerfulPerms.consolePrefix + "Could not inject permissible. Using default Bukkit permissions.");
-                e.printStackTrace();
+            if (p.isOnline()) {
+                try {
+                    injector.inject(p.getPlayer(), new CustomPermissibleBase(permissionsPlayer));
+                } catch (NoSuchFieldException e) {
+                    Bukkit.getLogger().severe(PowerfulPerms.consolePrefix + "You're not using Spigot. Spigot must be used for permissions to work properly.");
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    Bukkit.getLogger().severe(PowerfulPerms.consolePrefix + "Could not inject permissible. Using default Bukkit permissions.");
+                    e.printStackTrace();
+                }
             }
             putPermissionPlayer(p.getUniqueId(), permissionsPlayer);
             checkPlayerTimedGroupsAndPermissions(p.getUniqueId(), permissionsPlayer);
