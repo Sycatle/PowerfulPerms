@@ -57,36 +57,36 @@ PlaceholderAPI placeholders:
 
 
 ![commands](http://i.imgur.com/RK0mjMh.png)
-(/powerfulperms aliases: /pp /pop /pow
-/powerfulpermsbungee aliases: /ppbungee, popbungee, /powbungee)
+/powerfulperms aliases: /pp /pop /pow
+/powerfulpermsbungee aliases: /ppbungee, popbungee, /powbungee
 
-/pp user <user>
-/pp user <user> promote <ladder>
-/pp user <user> demote <ladder>
-/pp user <user> setrank <group>
-/pp user <user> addgroup/removegroup <group> (server) (expires)
-/pp user <user> add/remove <permission> (server) (world) (expires)
-/pp user <user> create/clearperms/delete
-/pp user <user> prefix/suffix set <prefix/suffix>
-/pp user <user> prefix/suffix remove
-/pp user <user> haspermission <permission> (server) (world)
-/pp groups
-/pp group <group>
-/pp group <group> create (ladder) (rank)
-/pp group <group> delete/clearperms/members
-/pp group <group> add/remove <permission> (server) (world) (expires)
-/pp group <group> parents add/remove <parent>
-/pp group <group> prefix/suffix set <prefix/suffix> (server)
-/pp group <group> prefix/suffix remove (server)
-/pp group <group> setladder <ladder>
-/pp group <group> setrank <rank>
-/pp group <group> rename <name>
-/pp group <group> haspermission <permission> (server) (world)
-/pp ladders
-/pp haspermission <permission>
-/pp reload/globalreload
-/pp test redis/database
-/pp about
+- /pp user <user>
+- /pp user <user> promote <ladder>
+- /pp user <user> demote <ladder>
+- /pp user <user> setrank <group>
+- /pp user <user> addgroup/removegroup <group> (server) (expires)
+- /pp user <user> add/remove <permission> (server) (world) (expires)
+- /pp user <user> create/clearperms/delete
+- /pp user <user> prefix/suffix set <prefix/suffix>
+- /pp user <user> prefix/suffix remove
+- /pp user <user> haspermission <permission> (server) (world)
+- /pp groups
+- /pp group <group>
+- /pp group <group> create (ladder) (rank)
+- /pp group <group> delete/clearperms/members
+- /pp group <group> add/remove <permission> (server) (world) (expires)
+- /pp group <group> parents add/remove <parent>
+- /pp group <group> prefix/suffix set <prefix/suffix> (server)
+- /pp group <group> prefix/suffix remove (server)
+- /pp group <group> setladder <ladder>
+- /pp group <group> setrank <rank>
+- /pp group <group> rename <name>
+- /pp group <group> haspermission <permission> (server) (world)
+- /pp ladders
+- /pp haspermission <permission>
+- /pp reload/globalreload
+- /pp test redis/database
+- /pp about
 
 All server and world parameters can be replaced by "all" to indicate a global setting.
 When removing permissions or player groups, all server, world and expiry date parameters can be replaced by "any" to remove any occurrences of that parameter.
